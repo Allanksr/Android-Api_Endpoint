@@ -24,7 +24,6 @@ import javax.inject.Named
 @ExperimentalCoroutinesApi
 @SmallTest
 @HiltAndroidTest
-//@UninstallModules(ApiModule::class)
 class PromotionalDaoTest {
 
     @get:Rule
