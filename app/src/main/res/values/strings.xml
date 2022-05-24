@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Api Endpoint</string>
+    <string name="api">Api</string>
+    <string name="endpoint">Endpoint</string>
+</resources>
