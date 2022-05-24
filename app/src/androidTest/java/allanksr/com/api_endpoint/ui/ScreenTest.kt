@@ -19,7 +19,6 @@ import org.junit.Before
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
-//@UninstallModules(ApiModule::class)
 class ScreenTest {
 
     @get:Rule(order = 0)
