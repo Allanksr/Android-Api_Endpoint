@@ -13,5 +13,9 @@ with clean architecture,
 ##### [dagger hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 
 
-## In this example we use the [google app script](https://www.google.com/script/start) as the backend.
+### In this example we use the [google app script](https://www.google.com/script/start) as the backend.
+
+## You may use this library [Local-EndpointServer](https://github.com/Allanksr/Local-Endpoint_server) as the backend.
+
+
 
