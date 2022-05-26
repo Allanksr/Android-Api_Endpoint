@@ -4,6 +4,7 @@ import allanksr.com.api_endpoint.DefaultDispatchers
 import allanksr.com.api_endpoint.DispatcherProvider
 import allanksr.com.api_endpoint.common.Constants.dataBaseName
 import allanksr.com.api_endpoint.common.Constants.endPointUrl
+import allanksr.com.api_endpoint.common.Constants.localEndPointUrl
 import allanksr.com.api_endpoint.data.remote.IEndPointApi
 import allanksr.com.api_endpoint.data.remote.local.PromotionalDao
 import allanksr.com.api_endpoint.data.remote.local.PromotionalItemDatabase
@@ -51,11 +52,11 @@ object ApiModule {
     @Singleton
     fun endPointApi(): IEndPointApi {
         return Retrofit.Builder()
-            .baseUrl(endPointUrl)
+            .baseUrl(localEndPointUrl)
             .client(
                 OkHttpClient.Builder()
-                    .connectTimeout(100, TimeUnit.SECONDS)
-                    .readTimeout(100, TimeUnit.SECONDS)
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()

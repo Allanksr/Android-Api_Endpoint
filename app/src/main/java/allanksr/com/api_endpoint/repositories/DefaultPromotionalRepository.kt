@@ -31,17 +31,13 @@ class DefaultPromotionalRepository @Inject constructor(
 
     override suspend fun searchPromotionalCode(codePromo: String): Resource<Promotion> {
         return try {
-            if(BuildConfig.API_KEY.isEmpty()){
-                Resource.error(define_api_key, null)
-            }else{
-                val response = endPointApi.callEndpoint(codePromo)
-                if(response.isSuccessful) {
-                    response.body()?.let {
-                        return@let Resource.success(it)
-                    } ?: Resource.error(unknown_error_occurred, null)
-                } else {
-                    Resource.error(unknown_error_occurred, null)
-                }
+            val response = endPointApi.callEndpoint(codePromo)
+            if(response.isSuccessful) {
+                response.body()?.let {
+                    return@let Resource.success(it)
+                } ?: Resource.error(unknown_error_occurred, null)
+            } else {
+                Resource.error(unknown_error_occurred, null)
             }
         } catch(e: Exception) {
             Resource.error(internet_error, null)

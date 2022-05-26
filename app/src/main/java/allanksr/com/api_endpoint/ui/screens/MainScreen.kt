@@ -3,6 +3,7 @@ package allanksr.com.api_endpoint.ui.screens
 import allanksr.com.api_endpoint.R
 import allanksr.com.api_endpoint.common.Constants.maxPromoLength
 import allanksr.com.api_endpoint.common.Status
+import allanksr.com.api_endpoint.common.StringResource.loading
 import allanksr.com.api_endpoint.common.StringResource.make_request
 import allanksr.com.api_endpoint.common.StringResource.promotion_applied
 import allanksr.com.api_endpoint.common.StringResource.promotion_expired
@@ -14,16 +15,16 @@ import allanksr.com.api_endpoint.common.toastLong
 import allanksr.com.api_endpoint.common.toastShort
 import allanksr.com.api_endpoint.data.remote.local.PromotionalItem
 import allanksr.com.api_endpoint.ui.MainViewModel
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
@@ -61,18 +62,25 @@ fun MainScreen(
         mutableStateOf("")
     }
 
+    val circularControl = remember {
+        mutableStateOf(false)
+    }
+
     LaunchedEffect(key1 = true) {
         viewModel.endPointApiResponseStatus.observe(localLifecycle) { eventResourcePromotion ->
             val result = eventResourcePromotion.getContentIfNotHandled()
             when (result?.status) {
                 Status.LOADING -> {
+                    circularControl.value = false
                     context.toastShort(result.message.toString())
                 }
                 Status.ERROR -> {
+                    circularControl.value = false
                     textInfo.value = result.message.toString()
                     context.toastShort(result.message.toString())
                 }
                 Status.SUCCESS -> {
+                    circularControl.value = false
                     val listSize = result.data!!.promo.size
                     viewModel.insertPromotionalItemIntoDb(
                         PromotionalItem(
@@ -177,35 +185,51 @@ fun MainScreen(
                     }
                 )
 
-                Box(modifier = Modifier.padding(10.dp),
-                    content = {
-                        Button(
-                            modifier = Modifier
-                                .testTag(TestTags.MAKE_REQUEST),
-                            onClick = {
-                                viewModel.insertPromotionalItem(promotionText)
-                                focusManager.clearFocus()
-                                promotionText = ""
-                            },
-                            content = {
-                                Text(
-                                    modifier = Modifier.padding(
-                                        start = 5.dp,
-                                        top = 5.dp,
-                                        end = 5.dp,
-                                        bottom = 5.dp,
-                                    ),
-                                    text = make_request,
-                                    style = TextStyle(
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 20.sp,
-                                        color = MaterialTheme.colors.onBackground
+                if (circularControl.value) {
+                    Box(modifier = Modifier.padding(10.dp),
+                        content = {
+                            CircularProgressIndicator(
+                                modifier = Modifier.clickable {
+                                    context.toastShort(loading)
+                                }
+                            )
+                        }
+                    )
+                }else{
+                    Box(modifier = Modifier.padding(10.dp),
+                        content = {
+                            Button(
+                                modifier = Modifier
+                                    .testTag(TestTags.MAKE_REQUEST),
+                                onClick = {
+                                    viewModel.insertPromotionalItem(promotionText)
+                                    focusManager.clearFocus()
+                                    promotionText = ""
+                                    circularControl.value = true
+                                },
+                                content = {
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            start = 5.dp,
+                                            top = 5.dp,
+                                            end = 5.dp,
+                                            bottom = 5.dp,
+                                        ),
+                                        text = make_request,
+                                        style = TextStyle(
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 20.sp,
+                                            color = MaterialTheme.colors.onBackground
+                                        )
                                     )
-                                )
-                            }
-                        )
-                    }
-                )
+                                }
+                            )
+                        }
+                    )
+                }
+
+
+
             }
 
             if (promotionItem.total_time.isNotEmpty()) {
