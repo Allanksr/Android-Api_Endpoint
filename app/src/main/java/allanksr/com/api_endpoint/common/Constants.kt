@@ -7,6 +7,7 @@ object Constants {
     const val maxPromoLength = 15
 
     const val endPointUrl = "https://script.google.com/macros/s/${BuildConfig.API_KEY}"
-    const val localEndPointUrl = "http://192.168.0.18:3000/"
+    //ipconfig in ms-dos to find your IPv4 address, something like -> 192.168.0.10
+    const val localEndPointUrl = "http://IPv4Address:3000/"
     const val dataBaseName = "dataBaseName_db"
 }
