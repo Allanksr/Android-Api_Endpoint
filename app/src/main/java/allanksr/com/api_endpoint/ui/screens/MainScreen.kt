@@ -71,7 +71,7 @@ fun MainScreen(
             val result = eventResourcePromotion.getContentIfNotHandled()
             when (result?.status) {
                 Status.LOADING -> {
-                    circularControl.value = false
+                    circularControl.value = true
                     context.toastShort(result.message.toString())
                 }
                 Status.ERROR -> {
@@ -185,17 +185,7 @@ fun MainScreen(
                     }
                 )
 
-                if (circularControl.value) {
-                    Box(modifier = Modifier.padding(10.dp),
-                        content = {
-                            CircularProgressIndicator(
-                                modifier = Modifier.clickable {
-                                    context.toastShort(loading)
-                                }
-                            )
-                        }
-                    )
-                }else{
+                if (!circularControl.value) {
                     Box(modifier = Modifier.padding(10.dp),
                         content = {
                             Button(
@@ -205,7 +195,6 @@ fun MainScreen(
                                     viewModel.insertPromotionalItem(promotionText)
                                     focusManager.clearFocus()
                                     promotionText = ""
-                                    circularControl.value = true
                                 },
                                 content = {
                                     Text(
@@ -226,10 +215,17 @@ fun MainScreen(
                             )
                         }
                     )
+                }else{
+                    Box(modifier = Modifier.padding(10.dp),
+                        content = {
+                            CircularProgressIndicator(
+                                modifier = Modifier.clickable {
+                                    context.toastShort(loading)
+                                }
+                            )
+                        }
+                    )
                 }
-
-
-
             }
 
             if (promotionItem.total_time.isNotEmpty()) {
