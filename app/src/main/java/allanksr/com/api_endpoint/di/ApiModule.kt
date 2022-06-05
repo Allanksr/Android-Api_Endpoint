@@ -3,7 +3,6 @@ package allanksr.com.api_endpoint.di
 import allanksr.com.api_endpoint.DefaultDispatchers
 import allanksr.com.api_endpoint.DispatcherProvider
 import allanksr.com.api_endpoint.common.Constants.dataBaseName
-import allanksr.com.api_endpoint.common.Constants.endPointUrl
 import allanksr.com.api_endpoint.common.Constants.localEndPointUrl
 import allanksr.com.api_endpoint.data.remote.IEndPointApi
 import allanksr.com.api_endpoint.data.remote.local.PromotionalDao
@@ -31,20 +30,20 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideShoppingItemDatabase(
+    fun providePromotionalItemDatabase(
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(context, PromotionalItemDatabase::class.java, dataBaseName).build()
 
     @Singleton
     @Provides
-    fun provideDefaultShoppingRepository(
+    fun provideDefaultPromotionalRepository(
         dao: PromotionalDao,
         api: IEndPointApi
     ) = DefaultPromotionalRepository(dao, api) as PromotionalRepository
 
     @Singleton
     @Provides
-    fun provideShoppingDao(
+    fun providePromotionalDao(
         database: PromotionalItemDatabase
     ) = database.promotionalDao()
 
