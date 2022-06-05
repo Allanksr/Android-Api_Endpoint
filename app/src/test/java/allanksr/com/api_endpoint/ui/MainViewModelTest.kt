@@ -69,7 +69,7 @@ class MainViewModelTest {
     @Test
     fun `counter running, returns success`() {
         viewModel.runningTime.value = true
-        viewModel.counter(1653294047520, 604800000)
+        viewModel.counter(System.currentTimeMillis(), 604800000)
         testDispatchers.testDispatcher.apply {
             advanceTimeBy(1000)
             runCurrent()
